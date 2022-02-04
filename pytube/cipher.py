@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 class Cipher:
     def __init__(self, js: str):
         self.transform_plan: List[str] = get_transform_plan(js)
-        var_regex = re.compile(r"^\$*\w+\W")
+        var_regex = re.compile(r"^\w+\W")
         var_match = var_regex.search(self.transform_plan[0])
         if not var_match:
             raise RegexMatchError(
@@ -265,8 +265,8 @@ def get_throttling_function_name(js: str) -> str:
         # https://github.com/ytdl-org/youtube-dl/issues/29326#issuecomment-865985377
         # a.C&&(b=a.get("n"))&&(b=Dea(b),a.set("n",b))}};
         # In above case, `Dea` is the relevant function name
-      #  r'a\.[A-Z]&&\(b=a\.get\("n"\)\)&&\(b=([^(]+)\(b\)',
-         r'([A-Za-z]{3})=function\(a\){var b=a\.split\(""\)\,
+        # r'a\.[A-Z]&&\(b=a\.get\("n"\)\)&&\(b=([^(]+)\(b\)', // Old one
+        r'([A-Za-z]{3})=function\(a\){var b=a\.split\(""\)\,'
     ]
     logger.debug('Finding throttling function name')
     for pattern in function_patterns:
@@ -291,7 +291,7 @@ def get_throttling_function_code(js: str) -> str:
         The name of the function used to compute the throttling parameter.
     """
     # Begin by extracting the correct function name
-    name = "jha"
+    name = re.escape(get_throttling_function_name(js))
 
     # Identify where the function is defined
     pattern_start = r"%s=function\(\w\)" % name
