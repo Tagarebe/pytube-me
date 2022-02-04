@@ -266,7 +266,7 @@ def get_throttling_function_name(js: str) -> str:
         # a.C&&(b=a.get("n"))&&(b=Dea(b),a.set("n",b))}};
         # In above case, `Dea` is the relevant function name
       #  r'a\.[A-Z]&&\(b=a\.get\("n"\)\)&&\(b=([^(]+)\(b\)',
-        r'([A-Za-z]{3})=function\(a\){var b=a\.split\(""\)\,
+         r'([A-Za-z]{3})=function\(a\){var b=a\.split\(""\)\,
     ]
     logger.debug('Finding throttling function name')
     for pattern in function_patterns:
